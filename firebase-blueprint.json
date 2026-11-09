@@ -1,0 +1,380 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Student profile at UEH Mekong",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string" },
+        "studentId": { "type": "string", "maxLength": 20 },
+        "major": { "type": "string", "maxLength": 100 },
+        "cohort": { "type": "string", "maxLength": 20 },
+        "bio": { "type": "string", "maxLength": 1000 },
+        "skillsToShare": { "type": "array" },
+        "skillsToLearn": { "type": "array" },
+        "proficiency": { "type": "string", "enum": ["Cơ bản", "Trung cấp", "Nâng cao"] },
+        "learningPreferences": { "type": "string", "enum": ["Online", "Offline", "Hybrid"] },
+        "availableTime": { "type": "string", "maxLength": 200 },
+        "role": { "type": "string", "enum": ["user", "admin", "superadmin"] },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "isProfileComplete": { "type": "boolean" },
+        "isPublic": { "type": "boolean" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["email", "displayName", "role", "status"]
+    },
+    "Skill": {
+      "title": "Skill",
+      "description": "Skills available for sharing and learning",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 },
+        "level": { "type": "string" },
+        "popular": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "hidden"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "categoryId", "status"]
+    },
+    "SkillCategory": {
+      "title": "SkillCategory",
+      "description": "Categories for organizing skills",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 300 },
+        "icon": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["name"]
+    },
+    "Connection": {
+      "title": "Connection",
+      "description": "1-on-1 skill exchange match and status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "requesterId": { "type": "string" },
+        "requesterName": { "type": "string" },
+        "requesterEmail": { "type": "string" },
+        "requesterPhoto": { "type": "string" },
+        "recipientId": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "recipientEmail": { "type": "string" },
+        "recipientPhoto": { "type": "string" },
+        "requesterSkillOffered": { "type": "string" },
+        "requesterSkillWanted": { "type": "string" },
+        "recipientSkillOffered": { "type": "string" },
+        "message": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected", "connected", "active", "completed", "cancelled", "disputed"] },
+        "scheduleInfo": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["requesterId", "recipientId", "status"]
+    },
+    "Group": {
+      "title": "Group",
+      "description": "Peer study group for collaborative skill learning",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 150 },
+        "topic": { "type": "string", "maxLength": 200 },
+        "skillNeeded": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string" },
+        "description": { "type": "string", "maxLength": 2000 },
+        "photoURL": { "type": "string" },
+        "minMembers": { "type": "number" },
+        "maxMembers": { "type": "number" },
+        "currentMembersCount": { "type": "number" },
+        "mode": { "type": "string", "enum": ["online", "offline", "hybrid"] },
+        "schedule": { "type": "string", "maxLength": 200 },
+        "location": { "type": "string", "maxLength": 200 },
+        "isPublic": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["open", "pending", "active", "completed", "cancelled", "reported"] },
+        "ownerId": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "ownerId", "status", "maxMembers"]
+    },
+    "GroupMember": {
+      "title": "GroupMember",
+      "description": "Members belonging to a study group",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "groupId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "role": { "type": "string", "enum": ["owner", "moderator", "member"] },
+        "joinedAt": { "type": "string" }
+      },
+      "required": ["groupId", "userId", "role"]
+    },
+    "GroupJoinRequest": {
+      "title": "GroupJoinRequest",
+      "description": "Application to join a private group",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "groupId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "message": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["groupId", "userId", "status"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Direct or group chat thread",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["direct", "group"] },
+        "participants": { "type": "array" },
+        "groupId": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "lastMessageAt": { "type": "string" },
+        "lastSenderId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["type", "participants"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message inside a conversation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "senderPhoto": { "type": "string" },
+        "text": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["conversationId", "senderId", "text"]
+    },
+    "Schedule": {
+      "title": "Schedule",
+      "description": "Scheduled learning or exchange session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["1-on-1", "group"] },
+        "title": { "type": "string", "maxLength": 150 },
+        "skillName": { "type": "string" },
+        "participants": { "type": "array" },
+        "groupId": { "type": "string" },
+        "connectionId": { "type": "string" },
+        "date": { "type": "string" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "mode": { "type": "string", "enum": ["online", "offline", "hybrid"] },
+        "locationOrLink": { "type": "string", "maxLength": 300 },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["proposed", "confirmed", "rescheduled", "completed", "cancelled"] },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "participants", "date", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notification event",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 500 },
+        "type": { "type": "string" },
+        "link": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "title", "message", "isRead"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Post-exchange student review",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["user", "group"] },
+        "targetId": { "type": "string" },
+        "targetName": { "type": "string" },
+        "reviewerId": { "type": "string" },
+        "reviewerName": { "type": "string" },
+        "reviewerPhoto": { "type": "string" },
+        "connectionId": { "type": "string" },
+        "groupId": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 1000 },
+        "helpfulRating": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["targetType", "targetId", "reviewerId", "rating", "comment"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Dispute or violation report submitted to administration",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reporterId": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["user", "group", "message", "review"] },
+        "targetId": { "type": "string" },
+        "targetName": { "type": "string" },
+        "reason": { "type": "string" },
+        "description": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["pending", "investigating", "resolved", "dismissed"] },
+        "resolvedBy": { "type": "string" },
+        "resolutionNotes": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["reporterId", "targetType", "targetId", "reason", "status"]
+    },
+    "CMS": {
+      "title": "CMS",
+      "description": "Dynamic homepage and portal content managed by Admins",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "heroBadge": { "type": "string" },
+        "announcement": { "type": "string" },
+        "guideSteps": { "type": "array" },
+        "contactEmail": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["heroTitle", "heroSubtitle"]
+    },
+    "AdminLog": {
+      "title": "AdminLog",
+      "description": "Audit trail log of all administrative actions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "adminId": { "type": "string" },
+        "adminName": { "type": "string" },
+        "adminEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "targetType": { "type": "string" },
+        "targetId": { "type": "string" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["adminId", "action", "timestamp"]
+    },
+    "SystemSetting": {
+      "title": "SystemSetting",
+      "description": "Global operational parameters",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "allowRegistrations": { "type": "boolean" },
+        "maintenanceMode": { "type": "boolean" },
+        "maxGroupSizeDefault": { "type": "number" },
+        "defaultApprovalMode": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["allowRegistrations", "maintenanceMode"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Student user profiles"
+    },
+    "/skills/{skillId}": {
+      "schema": "Skill",
+      "description": "Registered skill listings"
+    },
+    "/skillCategories/{categoryId}": {
+      "schema": "SkillCategory",
+      "description": "Taxonomy categories for skills"
+    },
+    "/connections/{connectionId}": {
+      "schema": "Connection",
+      "description": "1-1 skill exchange match records"
+    },
+    "/groups/{groupId}": {
+      "schema": "Group",
+      "description": "Study groups"
+    },
+    "/groupMembers/{memberDocId}": {
+      "schema": "GroupMember",
+      "description": "Group membership mappings"
+    },
+    "/groupJoinRequests/{requestId}": {
+      "schema": "GroupJoinRequest",
+      "description": "Requests to join private groups"
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Communication channels"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Messages inside conversations"
+    },
+    "/schedules/{scheduleId}": {
+      "schema": "Schedule",
+      "description": "Learning session agendas"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User notifications"
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Post-session evaluations"
+    },
+    "/reports/{reportId}": {
+      "schema": "Report",
+      "description": "Dispute and violation tickets"
+    },
+    "/cms/{docId}": {
+      "schema": "CMS",
+      "description": "Content management documents"
+    },
+    "/adminLogs/{logId}": {
+      "schema": "AdminLog",
+      "description": "Security audit records"
+    },
+    "/systemSettings/{settingId}": {
+      "schema": "SystemSetting",
+      "description": "Global system configurations"
+    }
+  }
+}

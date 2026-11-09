@@ -1,0 +1,6 @@
+{
+  "name": "SkillSwap UEH Mekong",
+  "description": "Nền tảng trao đổi kỹ năng và ghép nhóm học tập ngang hàng (Peer-to-Peer Learning) dành cho sinh viên UEH Mekong. Share What You Know. Learn What You Need.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
